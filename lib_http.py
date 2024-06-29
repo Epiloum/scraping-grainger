@@ -15,9 +15,13 @@ def get_from_url(url):
     response.raise_for_status()
     return response.text
 
-def get_elements_from_text(text, css_selector):
+def get_elements_from_texts(text, css_selector):
     soup = BeautifulSoup(text, 'html.parser')
     return soup.select(css_selector)
+    
+def get_elements_from_text(text, css_selector):
+    soup = BeautifulSoup(text, 'html.parser')
+    return soup.select_one(css_selector)
 
 def get_inner_html_from_elements(elements):
     return [element.decode_contents() for element in elements]

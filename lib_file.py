@@ -1,7 +1,7 @@
 def write_to_file(file_path, content):
     try:
         # 파일을 쓰기 모드로 열기 (파일이 없으면 생성됨)
-        with open(file_path, 'a+') as f:
+        with open(file_path, 'w+') as f:
             # 파일에 데이터 쓰기
             f.write(content)
         
