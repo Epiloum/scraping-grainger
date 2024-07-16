@@ -46,7 +46,7 @@ def get_variants(html):
         variants = http.get_from_url(variantUrl)
         variant = json.loads(variants)[0]
 
-        singular = [item['label'] for item in columns]
+        singular = [{'id': item['id'], 'name': item['label']} for item in columns]
         multiple = []
 
         if 'groupDifferingAttributes' in variant:
@@ -54,9 +54,11 @@ def get_variants(html):
             if f'{categoryId}' in att:
                 for item in att[f'{categoryId}']:
                     multiple.append(item['name'])
-                    if item['name'] in singular: singular.remove(item['name'])
+                    for s in singular:
+                        if s['id'] == item['merchandisingAttributeId']:
+                            singular.remove(s)
 
-        tup['variants']['singular'] = singular
+        tup['variants']['singular'] = [s['name'] for s in singular]
         tup['variants']['multiple'] = multiple
         tup['layout'] = check_layout(html)
         tuples.append(tup)
