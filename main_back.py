@@ -32,6 +32,7 @@ def get_title(html):
 
 def get_variants(html):
     elements = http.get_elements_from_text(html, '#__PRELOADED_STATE__')
+    if elements is None: return []
     data = json.loads(elements.decode_contents())
     categoryId = data['category']['category']['id']
     collections = data['category']['collections']
@@ -81,15 +82,14 @@ def export_categories_to_table(head, data):
     for item in data:
         if 'subs' in item:
             res = res + export_categories_to_table(
-                head + '<td><a href="https://www.grainger.com' + item['url'] + '">' + item[
-                    'title'] + '</a></td>', item['subs'])
+                head + '<td><a href="https://www.grainger.com' + item['url'] + '">' + item['title'] + '</a></td>', item['subs']
+            )
         else:
             depth = head.count('<td>')
             count_singular = len(item['variants']['singular'])
             count_multiple = len(item['variants']['multiple'])
 
-            categories = head + '<td><a href="https://www.grainger.com' + item['url'] + '">' + item[
-                'title'] + '</a></td>' + ('<td></td>' * (8 - depth))
+            categories = head + '<td>' + item['title'] + '</td>' + ('<td></td>' * (8 - depth))
             layout = '<td>' + item['layout'] + '</td>'
             variants_singular = ''.join(['<td>' + s + '</td>' for s in item['variants']['singular']]) + (
                     '<td></td>' * (12 - count_singular))
